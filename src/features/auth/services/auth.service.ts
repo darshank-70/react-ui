@@ -1,10 +1,5 @@
-import { httpClient } from '../../../app/lib/http/axios';
-import type { User } from '../types/auth.type';
-export type LoginRequest = {
-  username: string;
-  password: string;
-  expiresInMins?: number;
-};
+import { authHttpClient, httpClient } from '../../../app/lib/http/axios';
+import type { LoginRequest, RefreshResponse, User } from '../types/auth.type';
 
 export const authService = {
   async login(payload: LoginRequest): Promise<User> {
@@ -16,6 +11,12 @@ export const authService = {
   },
   async logout(): Promise<void> {
     await httpClient.post('/auth/logout');
+  },
+  async refreshToken(): Promise<RefreshResponse> {
+    const response = await authHttpClient.post('/auth/refresh', null, {
+      withCredentials: true,
+    });
+    return response.data;
   },
   async getCurrentUser(): Promise<User> {
     const response = await httpClient.get<User>('/auth/me');

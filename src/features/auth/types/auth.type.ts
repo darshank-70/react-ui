@@ -1,4 +1,11 @@
-import type { LoginRequest } from '../services/auth.service';
+export type LoginRequest = {
+  username: string;
+  password: string;
+  expiresInMins?: number;
+};
+export type RefreshResponse = {
+  accessToken: string;
+};
 
 export type User = {
   id: number;

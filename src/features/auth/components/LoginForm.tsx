@@ -20,7 +20,7 @@ function LoginForm() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await login({ username, password });
+      await login({ username, password, expiresInMins: 2 });
       navigate('/dashboard');
     } catch (error) {
       console.log(error);
