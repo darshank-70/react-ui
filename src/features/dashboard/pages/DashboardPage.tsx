@@ -2,11 +2,15 @@ import { useState } from 'react';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { authService } from '../../auth/services/auth.service';
 import type { User } from '../../auth/types/auth.type';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../app/store/hooks';
+import { setSearch } from '../../redux-query-testing/store/userPreferencesSlice';
 
 function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
 
   const { logout } = useAuth();
+  const navigate = useNavigate();
   // const changeId = () => {
   //   setUserId(Math.random().toString());
   // };
@@ -17,14 +21,26 @@ function DashboardPage() {
       console.log(error);
     }
   };
+
   const getMe = async () => {
     const user = await authService.getCurrentUser();
     setUser(user);
   };
+  const navigateTo = (path: string) => {
+    navigate(path);
+  };
+  const search = useAppSelector((state) => state.userPreferences.search);
+  const dispatch = useAppDispatch();
   return (
     <>
       <h1>Dashboard</h1>
-      <p>Welcome {user?.email}</p>{' '}
+      <button onClick={() => dispatch(setSearch('Hello World'))}>
+        Set Search to{' '}
+      </button>
+      <p>{search}</p>
+      <p>Welcome {user?.email}</p> <br />
+      <button onClick={() => navigateTo('/users')}>Users</button>
+      <button onClick={() => navigateTo('/redux')}>Redux</button>
       <button onClick={getMe}>Get My Details</button>
       {/* User Div */}
       {user && (
